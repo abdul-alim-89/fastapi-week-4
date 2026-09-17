@@ -1,6 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Field
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class ProductCreate(BaseModel):
+    name: str = Field(min_legth=3)
+    price: float = Field(gt=0)
+    in_stock: bool = True
+    tags: list[str] = []
 
 @app.get("/")
 def welcome():
