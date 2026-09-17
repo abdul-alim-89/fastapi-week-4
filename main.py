@@ -56,4 +56,5 @@ def get_products():
 
 @app.post("/products")
 def create_product(product: ProductCreate):
+    products.append(product.model_dump())
     return {"success": True, "message": "Product created successfully"}
