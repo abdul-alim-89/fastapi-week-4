@@ -53,3 +53,7 @@ def search_item(q: str | None = None):
 @app.get("/products", response_model=list[ProductCreate])
 def get_products():
     return products
+
+@app.post("/products")
+def create_product(product: ProductCreate):
+    return {"success": True, "message": "Product created successfully"}
