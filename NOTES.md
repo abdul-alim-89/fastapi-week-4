@@ -9,3 +9,10 @@ A single async worker can theoretically handle thousands of idle or waiting conn
 Think About It: If you remove the : int type hint from item_id, what changes in how FastAPI treats a request to /items/abc?
 
 Answer: When we remove type hints, we can pass any type of value as a parameter, such as a string, special character, or abc, and Python will accept it.FastAPI will no longer validate or convert item_id as an integer.
+
+#day2
+
+Think About It: What happens if a client sends an extra field your Pydantic model doesn't define — is it kept, dropped, or rejected? Test it and note what you observed.
+
+Answer: I noticed that passing an extra field "sales_price": 50 in the 'create product' endpoint didn't trigger a validation error and the API succeeded. To resolve this, I set extra="forbid" inside Pydantic's ConfigDict.
+After that we observed that extra inputs are not permitted

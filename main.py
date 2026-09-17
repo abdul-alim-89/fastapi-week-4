@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 app = FastAPI()
 
@@ -25,10 +25,12 @@ products = [{
 }]
 
 class Category(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     id: int
     name: str
 
 class ProductCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     name: str = Field(min_length=3)
     price: float = Field(gt=0)
     in_stock: bool = True
