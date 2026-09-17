@@ -29,13 +29,11 @@ class Category(BaseModel):
     name: str
 
 class ProductCreate(BaseModel):
-    name: str = Field(min_legth=3)
+    name: str = Field(min_length=3)
     price: float = Field(gt=0)
     in_stock: bool = True
     tags: list[str] = []
     category: Category
-
-
 
 @app.get("/")
 def welcome():
@@ -52,3 +50,6 @@ def search_item(q: str | None = None):
     """Search for items using the provided search query."""
     return {"success" : True, "message": f"Your search term : {q}"}
 
+@app.get("/products", response_model=list[ProductCreate])
+def get_products():
+    return products
