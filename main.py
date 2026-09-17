@@ -3,11 +3,16 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+class Category(BaseModel):
+    id: int
+    name: str
+
 class ProductCreate(BaseModel):
     name: str = Field(min_legth=3)
     price: float = Field(gt=0)
     in_stock: bool = True
     tags: list[str] = []
+    category: Category
 
 @app.get("/")
 def welcome():
