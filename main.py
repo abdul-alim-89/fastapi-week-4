@@ -4,7 +4,7 @@ app = FastAPI()
 
 @app.get("/")
 def welcome():
-    """Intial function"""
+    """Initial function"""
     return {"message" : "Welcome to fastapi"}
 
 @app.get("/item/{item_id}")
