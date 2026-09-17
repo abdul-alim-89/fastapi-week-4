@@ -1,6 +1,41 @@
 from fastapi import FastAPI
+from pydantic import BaseModel, Field, ConfigDict
 
 app = FastAPI()
+
+products = [{
+    "name": "Nike Shoes",
+    "price": 250.00,
+    "in_stock": True,
+    "tags": ["sport", "running"],
+    "category": {"id": 100, "name": "shoes"}
+},{
+    "name": "Sony Wireless Headphones",
+    "price": 180.00,
+    "in_stock": True,
+    "tags": ["audio", "bluetooth"],
+    "category": {"id": 101, "name": "electronics"}
+  },
+  {
+    "name": "Leather Travel Duffel",
+    "price": 125.50,
+    "in_stock": False,
+    "tags": ["travel", "bags"],
+    "category": {"id": 102, "name": "accessories"}
+}]
+
+class Category(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    id: int
+    name: str
+
+class ProductCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    name: str = Field(min_length=3)
+    price: float = Field(gt=0)
+    in_stock: bool = True
+    tags: list[str] = []
+    category: Category
 
 @app.get("/")
 def welcome():
@@ -16,3 +51,12 @@ def get_single_item(item_id: int):
 def search_item(q: str | None = None):
     """Search for items using the provided search query."""
     return {"success" : True, "message": f"Your search term : {q}"}
+
+@app.get("/products", response_model=list[ProductCreate])
+def get_products():
+    return products
+
+@app.post("/products")
+def create_product(product: ProductCreate):
+    products.append(product.model_dump())
+    return {"success": True, "message": "Product created successfully"}
