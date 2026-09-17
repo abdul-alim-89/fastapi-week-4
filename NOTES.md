@@ -16,3 +16,7 @@ Think About It: What happens if a client sends an extra field your Pydantic mode
 
 Answer: I noticed that passing an extra field "sales_price": 50 in the 'create product' endpoint didn't trigger a validation error and the API succeeded. To resolve this, I set extra="forbid" inside Pydantic's ConfigDict.
 After that we observed that extra inputs are not permitted
+
+Think About It: Why would you ever want response_model to be a DIFFERENT model than the one used for the request body?
+
+Answer: It depends on the use case. Since our current endpoint required identical request and response formats, a separate response model wasn't necessary. In production applications, however, incoming data often includes sensitive fields like passwords. In those cases, we define a dedicated response schema excluding those fields so that calling the GET API with that response_model prevents sensitive data leakage.
