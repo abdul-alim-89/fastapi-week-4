@@ -6,3 +6,8 @@ app = FastAPI()
 def welcome():
     """Intial function"""
     return {"message" : "Welcome to fastapi"}
+
+@app.get("/item/{item_id}")
+def get_single_item(item_id: int):
+    """Get a single item by its ID."""
+    return {"success": True, "message": f"Your item id is {item_id}"}
