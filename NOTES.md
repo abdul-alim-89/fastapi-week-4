@@ -20,3 +20,13 @@ After that we observed that extra inputs are not permitted
 Think About It: Why would you ever want response_model to be a DIFFERENT model than the one used for the request body?
 
 Answer: It depends on the use case. Since our current endpoint required identical request and response formats, a separate response model wasn't necessary. In production applications, however, incoming data often includes sensitive fields like passwords. In those cases, we define a dedicated response schema excluding those fields so that calling the GET API with that response_model prevents sensitive data leakage.
+
+#day3
+
+Think About It: Why do large FastAPI apps avoid keeping every route in one main.py? What specifically goes wrong as the app grows?
+
+Answer: Large FastAPI applications avoid keeping all routes in main.py because a single file quickly becomes bloated and unmaintainable, creating severe readability and navigation issues. Splitting routes into modular files (routers/users.py, routers/products.py) enables multiple developers to work simultaneously without Git merge conflicts, simplifies unit testing, prevents Python circular import errors, and keeps the overall architecture scalable and clean.
+
+Think About It: What's the difference between PUT and PATCH in practice — if you only update one field, which should you use, and why?
+
+Answer: Both PUT and PATCH are HTTP methods used to update data. PUT is used for a full replacement of a resource, meaning you must send all fields in the payload. PATCH, on the other hand, is used for partial updates, modifying only the specified fields without affecting the rest. If I only need to update a single field, I should use PATCH because it allows partial updates without requiring or overwriting all the other fields.
