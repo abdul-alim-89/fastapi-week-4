@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Request
 from models.schemas import ProductCreate
 
 router = APIRouter(prefix="/products", tags=["Product"])
