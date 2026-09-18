@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
+from models.schemas import ProductCreate
 
 router = APIRouter(prefix="/products", tags=["Product"])
 
@@ -25,3 +26,26 @@ products = [{
     "tags": ["travel", "bags"],
     "category": {"id": 102, "name": "accessories"}
 }]
+
+@router.get("/products", response_model=list[ProductCreate])
+def get_products():
+    return products
+
+@router.post("/products")
+def create_product(product: ProductCreate):
+    products.append(product.model_dump())
+    return {"success": True, "message": "Product created successfully"}
+
+@router.get("/{id}", response_model=ProductCreate)
+def get_single_product(id: int):
+
+    exit_product = None
+    for product in products:
+        if product["id"] == id:
+            exit_product = product
+            break
+
+    if exit_product is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+    return exit_product
+

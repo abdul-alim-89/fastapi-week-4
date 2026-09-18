@@ -7,6 +7,7 @@ class Category(BaseModel):
 
 class ProductCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    id: int
     name: str = Field(min_length=3)
     price: float = Field(gt=0)
     in_stock: bool = True

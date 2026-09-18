@@ -1,6 +1,9 @@
 from fastapi import FastAPI
-f
+from routers.products import router as product_router
+
 app = FastAPI()
+
+app.include_router(product_router)
 
 @app.get("/")
 def welcome():
@@ -17,11 +20,3 @@ def search_item(q: str | None = None):
     """Search for items using the provided search query."""
     return {"success" : True, "message": f"Your search term : {q}"}
 
-@app.get("/products", response_model=list[ProductCreate])
-def get_products():
-    return products
-
-@app.post("/products")
-def create_product(product: ProductCreate):
-    products.append(product.model_dump())
-    return {"success": True, "message": "Product created successfully"}
