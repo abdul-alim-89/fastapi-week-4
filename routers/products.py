@@ -27,18 +27,27 @@ products = [{
     "category": {"id": 102, "name": "accessories"}
 }]
 
-@router.get("/products", response_model=list[ProductCreate])
+@router.get("/", response_model=list[ProductCreate])
 def get_products():
     return products
 
-@router.post("/products")
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create_product(product: ProductCreate):
-    products.append(product.model_dump())
+    product_dict = product.model_dump()
+    exit_product = False
+    for prod in products:
+        if prod["id"] == product_dict["id"]:
+            exit_product = True
+            break
+
+    if exit_product:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="product id already exit")
+
+    products.append(product_dict)
     return {"success": True, "message": "Product created successfully"}
 
 @router.get("/{id}", response_model=ProductCreate)
 def get_single_product(id: int):
-
     exit_product = None
     for product in products:
         if product["id"] == id:
