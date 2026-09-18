@@ -4,27 +4,6 @@ from pydantic import BaseModel, Field, ConfigDict
 
 app = FastAPI()
 
-products = [{
-    "name": "Nike Shoes",
-    "price": 250.00,
-    "in_stock": True,
-    "tags": ["sport", "running"],
-    "category": {"id": 100, "name": "shoes"}
-},{
-    "name": "Sony Wireless Headphones",
-    "price": 180.00,
-    "in_stock": True,
-    "tags": ["audio", "bluetooth"],
-    "category": {"id": 101, "name": "electronics"}
-  },
-  {
-    "name": "Leather Travel Duffel",
-    "price": 125.50,
-    "in_stock": False,
-    "tags": ["travel", "bags"],
-    "category": {"id": 102, "name": "accessories"}
-}]
-
 class Category(BaseModel):
     model_config = ConfigDict(extra="forbid")
     id: int
