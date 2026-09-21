@@ -30,3 +30,15 @@ Answer: Large FastAPI applications avoid keeping all routes in main.py because a
 Think About It: What's the difference between PUT and PATCH in practice — if you only update one field, which should you use, and why?
 
 Answer: Both PUT and PATCH are HTTP methods used to update data. PUT is used for a full replacement of a resource, meaning you must send all fields in the payload. PATCH, on the other hand, is used for partial updates, modifying only the specified fields without affecting the rest. If I only need to update a single field, I should use PATCH because it allows partial updates without requiring or overwriting all the other fields.
+
+#Day 4
+
+Think About It: Why is get_db usually written as a dependency with yield instead of just returning a session directly? What would break if you used return instead?
+Answer: Why yield: It acts as a setup/teardown manager. Code before yield creates the session; code after yield closes it.
+
+What breaks with return: The session stays open forever, causing connection pool leaks that quickly crash your database in production.
+
+Think About It: What actually goes wrong in production if two requests share the same DB session at the same time?
+Answer:Data Leakage & Corruption: Request B can accidentally commit or overwrite uncommitted changes made by Request A.
+
+Crashes & Socket Errors: Concurrent queries interleave over the same network connection, triggering protocol errors and corrupted responses.
