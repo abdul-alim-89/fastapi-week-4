@@ -1,5 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import String, Text, DATE, DATETIME, func
+from sqlalchemy import String, Text, DATE, DateTime, func
 from datetime import date, datetime
 
 class Base(DeclarativeBase):
@@ -12,4 +12,4 @@ class Task(Base):
     title: Mapped[str] = mapped_column(String(250), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     due_date: Mapped[date] = mapped_column(DATE, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DATETIME(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
