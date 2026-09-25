@@ -31,8 +31,21 @@ def create_task(task: TaskCreate, db: Session=Depends(get_db)):
     return {"success": True, "message":"Task created successfully"}
 
 @router.put("/{task_id}")
-def update_task(task_id: int, task_data: TaskUpdate, db: Session = Depends(get_db)):
-    pass
+def update_task(task_id: int, update_task: TaskUpdate, db: Session = Depends(get_db)):
+    print(update_task)
+    task = db.scalars(select(Task).where(Task.id == task_id)).first()
+    print(task)
+    if task is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+    
+    update_data = update_task.model_dump(exclude_unset=True)
+    print(update_data)
+    for key, value in update_data.items():
+        setattr(task, key, value)
+    db.commit()
+    db.refresh(task)
+    return {"success": True, "message": "task updated successfully"}
+
 
 @router.delete("/{task_id}")
 def delete_task(task_id: int, db: Session = Depends(get_db)):
@@ -45,9 +58,7 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=TaskOut)
 def get_single_task(id: int, db: Session = Depends(get_db)):
-        get_task = db.scalars(
-            select(Task).where(Task.id == id)
-        ).first()
+        get_task = db.scalars(select(Task).where(Task.id == id)).first()
 
         if get_task is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
