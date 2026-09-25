@@ -9,7 +9,7 @@ class TaskCreate(BaseModel):
 
 class TaskUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    title: str | None = Field(min_length=3, default=None)
+    title: str | None = None
     description: str | None = None
     due_date: date | None = None
 

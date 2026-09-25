@@ -42,3 +42,25 @@ Think About It: What actually goes wrong in production if two requests share the
 Answer:Data Leakage & Corruption: Request B can accidentally commit or overwrite uncommitted changes made by Request A.
 
 Crashes & Socket Errors: Concurrent queries interleave over the same network connection, triggering protocol errors and corrupted responses.
+
+#Day 5
+
+Think About It: Why do most real FastAPI projects keep separate schemas.py (Pydantic) and models.py (ORM), instead of reusing one class for both?
+Answer: The ORM model is used to define the database table structure, including fields, primary keys, relationships, and database-level constraints.
+
+The Pydantic schemas are used to define what data the API accepts from the user and what data it returns in the response. We can create separate schemas for different operations, such as creating, updating, and returning data.
+
+Keeping them separate also prevents sensitive or internal database fields from being accidentally exposed in API responses.
+
+Think About It: What's a realistic bug that happens if your PATCH endpoint doesn't handle 'field not provided' correctly?
+Answer: when a user updates only one field, other fields that were not provided can accidentally be overwritten with None or default values, causing existing data to be lost.
+
+For example, if the user sends only:
+
+{
+  "title": "Learn Advanced FastAPI"
+}
+
+the API might accidentally set description and due_date to NULL.
+
+To prevent this issue, we use exclude_unset=True so that only the fields provided by the user are updated.

@@ -3,7 +3,7 @@ from schemas.task import TaskCreate, TaskUpdate, TaskOut
 from sqlalchemy.orm import Session
 from database import get_db
 from models.task import Task
-from sqlalchemy import select, delete
+from sqlalchemy import select
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=list[TaskOut])
@@ -32,14 +32,16 @@ def create_task(task: TaskCreate, db: Session=Depends(get_db)):
 
 @router.put("/{task_id}")
 def update_task(task_id: int, update_task: TaskUpdate, db: Session = Depends(get_db)):
-    print(update_task)
+    # print(update_task)
     task = db.scalars(select(Task).where(Task.id == task_id)).first()
-    print(task)
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
     
     update_data = update_task.model_dump(exclude_unset=True)
-    print(update_data)
+    # print(update_task)
+    if not update_task:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="At least one field is required for update")
+    #print(update_data)
     for key, value in update_data.items():
         setattr(task, key, value)
     db.commit()
