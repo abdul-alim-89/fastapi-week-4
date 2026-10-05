@@ -1,11 +1,10 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import String, Text, DATE, DateTime, func
 from datetime import date, datetime
-
-class Base(DeclarativeBase):
-    pass
+from database import Base
 
 class Task(Base):
+    
     __tablename__ = "tasks"
 
     id: Mapped[int] = mapped_column(primary_key=True)
